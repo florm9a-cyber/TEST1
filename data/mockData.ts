@@ -1,95 +1,107 @@
 import { Channel, Family, SubFamily, SportsEvent } from '../types';
 
-// Updated Families based on your request
+// Updated Families with empty images as requested. 
+// The UI will fall back to using the 'icon' and 'bgColor'.
 export const FAMILIES: Family[] = [
   { 
     id: 'nfl', 
     name: 'NFL', 
     icon: 'Trophy', 
-    description: 'National Football League',
-    image: 'https://images.unsplash.com/photo-1566577739112-5180d4bf9390?q=80&w=800&auto=format&fit=crop'
+    description: 'Sunday Night Football',
+    image: '', // Image placeholder
+    bgColor: '#013369' // NFL Blue
   },
   { 
     id: 'nba', 
     name: 'NBA', 
     icon: 'Dribbble', 
-    description: 'National Basketball Association',
-    image: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=800&auto=format&fit=crop'
+    description: 'League Pass & Playoffs',
+    image: '', 
+    bgColor: '#C9082A' // NBA Red
   },
   { 
     id: 'nhl', 
     name: 'NHL', 
     icon: 'ThermometerSnowflake', 
-    description: 'National Hockey League',
-    image: 'https://images.unsplash.com/photo-1580748141549-71748dbe0bdc?q=80&w=800&auto=format&fit=crop'
+    description: 'Center Ice Action',
+    image: '', 
+    bgColor: '#111111' // Black/Silver
   },
   { 
     id: 'mlb', 
     name: 'MLB', 
     icon: 'Target', 
-    description: 'Major League Baseball',
-    image: 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=800&auto=format&fit=crop'
+    description: 'Home Run Derby',
+    image: '', 
+    bgColor: '#002D62' // MLB Blue
   },
   { 
     id: 'soc', 
     name: 'Soccer', 
     icon: 'Activity', 
-    description: 'Premier League, MLS & More',
-    image: 'https://images.unsplash.com/photo-1552667684-c5d081b6f8ac?q=80&w=800&auto=format&fit=crop'
+    description: 'EPL, La Liga, UCL',
+    image: '', 
+    bgColor: '#1e1b4b' // Dark Navy/Purple
   },
   { 
     id: 'ncaa', 
     name: 'NCAA', 
     icon: 'GraduationCap', 
-    description: 'College Sports',
-    image: 'https://images.unsplash.com/photo-1628779238951-bd5c9e22311e?q=80&w=800&auto=format&fit=crop'
+    description: 'College Football',
+    image: '',
+    bgColor: '#0065A8' // NCAA Blue
   },
   { 
     id: 'com', 
     name: 'Combat', 
     icon: 'Swords', 
-    description: 'UFC, Boxing & MMA',
-    image: 'https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=800&auto=format&fit=crop'
+    description: 'UFC & Boxing',
+    image: '',
+    bgColor: '#D20A0A' // UFC Red
   },
   { 
     id: 'golf', 
     name: 'Golf', 
     icon: 'Flag', 
-    description: 'PGA Tour & Majors',
-    image: 'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?q=80&w=800&auto=format&fit=crop'
+    description: 'PGA Tour',
+    image: '',
+    bgColor: '#00652E' // PGA Green
   },
   { 
     id: 'ten', 
     name: 'Tennis', 
     icon: 'Award', 
-    description: 'ATP & WTA Tours',
-    image: 'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?q=80&w=800&auto=format&fit=crop'
+    description: 'Grand Slams',
+    image: '',
+    bgColor: '#002865' // ATP Blue
   },
   { 
     id: 'motor', 
     name: 'Motorsport', 
     icon: 'Gauge', 
-    description: 'F1, NASCAR & IndyCar',
-    image: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=800&auto=format&fit=crop'
+    description: 'F1 & NASCAR',
+    image: '',
+    bgColor: '#FF1801' // F1 Red
   },
   { 
     id: 'out', 
     name: 'Outdoor', 
     icon: 'Mountain', 
-    description: 'Hunting, Fishing & Nature',
-    image: 'https://images.unsplash.com/photo-1534958172901-529a6b5797d0?q=80&w=800&auto=format&fit=crop'
+    description: 'Hunting & Fishing',
+    image: '',
+    bgColor: '#593110' // Earthy Brown
   },
   { 
     id: 'ott', 
     name: 'Streaming', 
     icon: 'Wifi', 
-    description: 'General & Exclusive Events',
-    image: 'https://images.unsplash.com/photo-1593784991095-a205069470b6?q=80&w=800&auto=format&fit=crop'
+    description: 'Live Events',
+    image: '',
+    bgColor: '#000000' // Black/White
   },
 ];
 
 export const SUB_FAMILIES: SubFamily[] = [
-  // Keeping generic subfamilies for filtering if needed
   { id: 'us', familyId: 'gen', name: 'USA' },
   { id: 'ca', familyId: 'gen', name: 'Canada' },
 ];
@@ -386,7 +398,7 @@ export const CHANNELS: Channel[] = [
     subFamilyId: 'us',
     country: 'USA',
     language: 'EN',
-    quality: ['FHD'],
+    quality: ['FHD', '4K'],
     tags: ['LIVE'],
     currentProgram: 'Live Racing'
   },

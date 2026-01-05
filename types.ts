@@ -3,7 +3,8 @@ export interface Family {
   name: string;
   icon: string; // Lucide icon name or image path
   description: string;
-  image: string; // Background image for the card
+  image: string; // URL to the PNG image
+  bgColor?: string; // Hex code for the card background gradient
 }
 
 export interface SubFamily {

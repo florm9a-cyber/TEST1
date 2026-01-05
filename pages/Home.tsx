@@ -1,11 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { CheckCircle, Wifi, Globe, Shield, Trophy, Dribbble, Target, Activity, GraduationCap, Swords, Flag, Award, Gauge, Mountain, ThermometerSnowflake } from 'lucide-react';
+import { 
+  CheckCircle, Wifi, Globe, Shield, Trophy, Zap, ImageOff,
+  Dribbble, ThermometerSnowflake, Target, Activity, GraduationCap, 
+  Swords, Flag, Award, Gauge, Mountain 
+} from 'lucide-react';
 import { FAMILIES } from '../data/mockData';
 
-// Helper to map icon string to Lucide component
-const IconMap: { [key: string]: React.ElementType } = {
+// Map icons purely for display logic since we can't dynamic import easily in this setup
+const iconMap: Record<string, React.ElementType> = {
   'Trophy': Trophy,
   'Dribbble': Dribbble,
   'ThermometerSnowflake': ThermometerSnowflake,
@@ -17,19 +21,19 @@ const IconMap: { [key: string]: React.ElementType } = {
   'Award': Award,
   'Gauge': Gauge,
   'Mountain': Mountain,
-  'Wifi': Wifi,
+  'Wifi': Wifi
 };
 
 const Home: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen">
       
-      {/* HERO SECTION */}
+      {/* HERO SECTION - Background is body color (#0D2F14) */}
       <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
         {/* Background Gradients */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full z-0 pointer-events-none opacity-20">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-600 rounded-full blur-[128px]"></div>
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600 rounded-full blur-[128px]"></div>
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-600 rounded-full blur-[128px]"></div>
         </div>
 
         <div className="container mx-auto px-4 relative z-10 text-center">
@@ -43,7 +47,7 @@ const Home: React.FC = () => {
             </span>
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6">
               All US & CA Sports. <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-orange-500">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-emerald-400">
                 One Subscription.
               </span>
             </h1>
@@ -52,7 +56,7 @@ const Home: React.FC = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link to="/pricing" className="bg-brand-600 hover:bg-brand-700 text-white text-lg px-8 py-4 rounded-full font-bold transition-transform hover:scale-105 shadow-xl shadow-brand-600/20">
+              <Link to="/pricing" className="bg-brand-600 hover:bg-brand-700 text-slate-950 text-lg px-8 py-4 rounded-full font-bold transition-transform hover:scale-105 shadow-xl shadow-brand-600/20">
                 Start Free Trial
               </Link>
               <Link to="/sports" className="bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 text-lg px-8 py-4 rounded-full font-bold transition-colors flex items-center justify-center gap-2">
@@ -70,75 +74,95 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* CATEGORIES PREVIEW */}
-      <section className="py-20 bg-slate-900/50 border-y border-slate-800">
+      {/* COMPETITIONS / FAMILIES GRID */}
+      <section className="py-16 bg-gradient-to-b from-slate-950 to-black border-t border-slate-900">
         <div className="container mx-auto px-4">
-           <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-white mb-4">Unlimited Sports Access</h2>
-              <p className="text-slate-400 max-w-2xl mx-auto">
-                Stream your favorite leagues and events live. Choose a category to explore our extensive channel lineup.
-              </p>
+           
+           <div className="flex items-center justify-between mb-10">
+              <h2 className="text-3xl font-bold text-white">Competitions</h2>
+              <div className="h-px bg-slate-800 flex-grow ml-6 hidden md:block"></div>
            </div>
 
-           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+           {/* Responsive Grid: 2 columns mobile, 3 on tablet, 6 on desktop */}
+           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
               {FAMILIES.map((fam) => {
-                const IconComponent = IconMap[fam.icon] || Trophy; // Default icon if not found
+                const IconComponent = iconMap[fam.icon] || Trophy;
 
                 return (
-                  <Link key={fam.id} to={`/sports?family=${fam.id}`}>
-                    <motion.div 
-                      whileHover={{ scale: 1.02, y: -5 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="group relative aspect-[4/3] md:aspect-[16/9] lg:aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer shadow-lg border border-slate-800"
-                    >
-                      {/* Background Image */}
-                      <img 
-                        src={fam.image} 
-                        alt={fam.name} 
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
-                      
-                      {/* Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent opacity-90 group-hover:opacity-80 transition-opacity"></div>
-                      
-                      {/* Content */}
-                      <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                         <div className="bg-brand-600/90 w-12 h-12 rounded-xl flex items-center justify-center mb-4 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                            <IconComponent className="w-6 h-6 text-white" />
+                  <Link key={fam.id} to={`/sports?family=${fam.id}`} className="group block">
+                      {/* Card Container */}
+                      <motion.div 
+                        whileHover={{ scale: 1.05, y: -5 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="aspect-square rounded-3xl flex items-center justify-center shadow-2xl relative overflow-hidden mb-3 border border-white/5 group-hover:border-white/20 transition-all"
+                        style={{ 
+                            // Dynamic gradient based on family color
+                            background: `linear-gradient(135deg, ${fam.bgColor || '#1e293b'} 0%, #050505 100%)`,
+                            boxShadow: `0 10px 30px -5px ${fam.bgColor || '#000'}33`
+                        }}
+                      >
+                         {/* Glossy Overlay Top Right */}
+                         <div className="absolute top-0 right-0 w-3/4 h-3/4 bg-white opacity-[0.08] rounded-full blur-2xl transform translate-x-4 -translate-y-4 pointer-events-none"></div>
+                         
+                         {/* Center Logo/Icon */}
+                         <div className="w-full h-full flex items-center justify-center p-6 z-10 relative">
+                            {fam.image ? (
+                              <img 
+                                src={fam.image}
+                                alt={fam.name}
+                                className="w-full h-full object-contain filter drop-shadow-[0_5px_15px_rgba(0,0,0,0.5)] transition-transform duration-300 group-hover:scale-110"
+                                onError={(e) => {
+                                  // Fallback logic if image fails (though images are removed now)
+                                  e.currentTarget.style.display = 'none';
+                                  e.currentTarget.parentElement?.querySelector('.fallback-icon')?.classList.remove('hidden');
+                                }}
+                              />
+                            ) : (
+                               // No Image? Show the Icon nicely
+                               <div className="fallback-icon flex flex-col items-center justify-center text-white/90 group-hover:text-white transition-colors">
+                                  <IconComponent strokeWidth={1.5} className="w-12 h-12 md:w-16 md:h-16 mb-2 drop-shadow-lg" />
+                               </div>
+                            )}
+                            
+                            {/* Hidden fallback container if image load fails */}
+                            <div className="fallback-icon hidden flex flex-col items-center justify-center text-white/50">
+                               <ImageOff className="w-10 h-10 mb-2 opacity-50" />
+                            </div>
                          </div>
-                         <div>
-                           <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-brand-400 transition-colors">{fam.name}</h3>
-                           <p className="text-xs text-slate-300 font-medium opacity-80">{fam.description}</p>
-                         </div>
-                      </div>
-                    </motion.div>
+                      </motion.div>
+                      
+                      {/* Title Below Card */}
+                      <h3 className="text-white font-bold text-base md:text-lg leading-tight group-hover:text-brand-500 transition-colors text-center">
+                        {fam.name}
+                      </h3>
                   </Link>
                 );
               })}
            </div>
+
         </div>
       </section>
 
-      {/* FEATURES GRID */}
-      <section className="py-20 bg-slate-950">
+      {/* FEATURES GRID - Pure Black Background */}
+      <section className="py-20 bg-black">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-12">
-            <div className="bg-slate-900/40 p-8 rounded-3xl border border-slate-800 hover:border-brand-500/30 transition-colors">
+            <div className="bg-white/5 p-8 rounded-3xl border border-white/10 hover:border-brand-500/30 transition-colors">
                <Wifi className="w-10 h-10 text-brand-500 mb-6" />
                <h3 className="text-xl font-bold text-white mb-3">Anti-Freeze Technology</h3>
                <p className="text-slate-400 leading-relaxed">
                  Our proprietary CDN routing ensures you never miss a knockout or a touchdown. Zero buffering, instant load times.
                </p>
             </div>
-            <div className="bg-slate-900/40 p-8 rounded-3xl border border-slate-800 hover:border-brand-500/30 transition-colors">
-               <Globe className="w-10 h-10 text-blue-500 mb-6" />
+            <div className="bg-white/5 p-8 rounded-3xl border border-white/10 hover:border-brand-500/30 transition-colors">
+               <Globe className="w-10 h-10 text-emerald-400 mb-6" />
                <h3 className="text-xl font-bold text-white mb-3">Geo-Unblocked</h3>
                <p className="text-slate-400 leading-relaxed">
                  Watch local blackouts and international events from anywhere. No VPN required, we handle the routing for you.
                </p>
             </div>
-            <div className="bg-slate-900/40 p-8 rounded-3xl border border-slate-800 hover:border-brand-500/30 transition-colors">
-               <Shield className="w-10 h-10 text-emerald-500 mb-6" />
+            <div className="bg-white/5 p-8 rounded-3xl border border-white/10 hover:border-brand-500/30 transition-colors">
+               <Shield className="w-10 h-10 text-brand-400 mb-6" />
                <h3 className="text-xl font-bold text-white mb-3">Secure & Private</h3>
                <p className="text-slate-400 leading-relaxed">
                  We respect your privacy. No logs, secure encrypted connections, and anonymous payment options available.
@@ -148,13 +172,13 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* CTA SECTION */}
-      <section className="py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-brand-900/20"></div>
+      {/* CTA SECTION - Pure Black Background */}
+      <section className="py-20 relative overflow-hidden bg-black">
+        <div className="absolute inset-0 bg-brand-900/10"></div>
         <div className="container mx-auto px-4 relative z-10 text-center">
            <h2 className="text-4xl font-bold text-white mb-6">Ready to upgrade your game?</h2>
            <p className="text-slate-300 text-lg mb-8 max-w-xl mx-auto">Join 15,000+ happy subscribers. Get instant access immediately after payment.</p>
-           <Link to="/pricing" className="inline-block bg-white text-brand-600 hover:bg-slate-100 text-xl px-10 py-5 rounded-full font-bold shadow-2xl transition-all hover:scale-105">
+           <Link to="/pricing" className="inline-block bg-brand-500 text-slate-950 hover:bg-brand-400 text-xl px-10 py-5 rounded-full font-bold shadow-2xl transition-all hover:scale-105">
              Get Started Now
            </Link>
            <p className="mt-6 text-sm text-slate-500">Compatible with Smart TV, Firestick, Android, iOS, PC & Mac</p>
