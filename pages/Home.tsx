@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { 
   CheckCircle, Wifi, Globe, Shield, Trophy, Zap, ImageOff,
   Dribbble, ThermometerSnowflake, Target, Activity, GraduationCap, 
-  Swords, Flag, Award, Gauge, Mountain 
+  Swords, Flag, Award, Gauge, Mountain, Volume2, VolumeX
 } from 'lucide-react';
 import { FAMILIES } from '../data/mockData';
 
@@ -25,57 +25,108 @@ const iconMap: Record<string, React.ElementType> = {
 };
 
 const Home: React.FC = () => {
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Toggle Audio Function
+  const toggleAudio = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
+    }
+  };
+
+  // Scroll Animation Variants
+  const fadeInUp: Variants = {
+    hidden: { opacity: 0, y: 60 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut" }
+    }
+  };
+
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-slate-950">
       
-      {/* HERO SECTION - Background is body color (#0D2F14) */}
-      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-        {/* Background Gradients */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full z-0 pointer-events-none opacity-20">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-600 rounded-full blur-[128px]"></div>
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-600 rounded-full blur-[128px]"></div>
+      {/* HERO SECTION WITH VIDEO BACKGROUND */}
+      <section className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
+        
+        {/* Video Element */}
+        <div className="absolute inset-0 z-0">
+          <video
+            ref={videoRef}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
+            // Using a high-quality sports placeholder. Replace this URL with your local file or hosted video link.
+            src="https://assets.mixkit.co/videos/preview/mixkit-athlete-running-on-a-track-in-a-stadium-43615-large.mp4"
+          />
+          {/* Dark Overlay for text readability */}
+          <div className="absolute inset-0 bg-slate-950/70 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent"></div>
         </div>
 
-        <div className="container mx-auto px-4 relative z-10 text-center">
+        {/* Audio Control Button */}
+        <button 
+          onClick={toggleAudio}
+          className="absolute bottom-10 right-6 z-30 p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white transition-all duration-300 group"
+          aria-label="Toggle sound"
+        >
+          {isMuted ? (
+            <VolumeX className="w-6 h-6 group-hover:scale-110 transition-transform" />
+          ) : (
+            <Volume2 className="w-6 h-6 text-brand-500 group-hover:scale-110 transition-transform" />
+          )}
+        </button>
+
+        <div className="container mx-auto px-4 relative z-10 text-center pt-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <span className="inline-block py-1 px-3 rounded-full bg-slate-800 border border-slate-700 text-brand-400 text-xs font-bold tracking-wider mb-6">
+            <span className="inline-block py-1 px-3 rounded-full bg-slate-800/80 backdrop-blur border border-slate-600 text-brand-400 text-xs font-bold tracking-wider mb-6 shadow-lg">
               #1 RATED SPORTS IPTV
             </span>
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6">
+            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6 drop-shadow-2xl">
               All US & CA Sports. <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-emerald-400">
                 One Subscription.
               </span>
             </h1>
-            <p className="mt-4 text-xl text-slate-400 max-w-2xl mx-auto mb-10">
+            <p className="mt-4 text-xl text-slate-200 max-w-2xl mx-auto mb-10 font-medium drop-shadow-md">
               Access 85+ premium sports channels in HD, FHD & 4K. NFL, NBA, NHL, MLB, UFC, Soccer and more without blackouts.
             </p>
 
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link to="/pricing" className="bg-brand-600 hover:bg-brand-700 text-slate-950 text-lg px-8 py-4 rounded-full font-bold transition-transform hover:scale-105 shadow-xl shadow-brand-600/20">
+              <Link to="/pricing" className="bg-brand-600 hover:bg-brand-700 text-slate-950 text-lg px-8 py-4 rounded-full font-bold transition-transform hover:scale-105 shadow-xl shadow-brand-600/30">
                 Start Free Trial
               </Link>
-              <Link to="/sports" className="bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 text-lg px-8 py-4 rounded-full font-bold transition-colors flex items-center justify-center gap-2">
+              <Link to="/sports" className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/20 text-lg px-8 py-4 rounded-full font-bold transition-colors flex items-center justify-center gap-2">
                 <Trophy className="w-5 h-5" /> View Channels
               </Link>
             </div>
 
-            <div className="mt-12 flex flex-wrap justify-center gap-8 text-slate-500 text-sm font-medium">
-               <div className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-brand-500" /> No Buffering</div>
-               <div className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-brand-500" /> 4K Ultra HD</div>
-               <div className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-brand-500" /> 99.9% Uptime</div>
-               <div className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-brand-500" /> Multi-Device</div>
+            <div className="mt-12 flex flex-wrap justify-center gap-8 text-slate-300 text-sm font-semibold">
+               <div className="flex items-center gap-2 drop-shadow-md"><CheckCircle className="w-4 h-4 text-brand-500" /> No Buffering</div>
+               <div className="flex items-center gap-2 drop-shadow-md"><CheckCircle className="w-4 h-4 text-brand-500" /> 4K Ultra HD</div>
+               <div className="flex items-center gap-2 drop-shadow-md"><CheckCircle className="w-4 h-4 text-brand-500" /> 99.9% Uptime</div>
+               <div className="flex items-center gap-2 drop-shadow-md"><CheckCircle className="w-4 h-4 text-brand-500" /> Multi-Device</div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* COMPETITIONS / FAMILIES GRID */}
-      <section className="py-16 bg-gradient-to-b from-slate-950 to-black border-t border-slate-900">
+      {/* COMPETITIONS / FAMILIES GRID - Animated on Scroll */}
+      <motion.section 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={fadeInUp}
+        className="py-16 bg-gradient-to-b from-slate-950 to-black border-t border-slate-900 relative z-20"
+      >
         <div className="container mx-auto px-4">
            
            <div className="flex items-center justify-between mb-10">
@@ -90,11 +141,11 @@ const Home: React.FC = () => {
 
                 return (
                   <Link key={fam.id} to={`/sports?family=${fam.id}`} className="group block">
-                      {/* Card Container */}
+                      {/* Card Container - Changed to aspect-[3/4] for portrait mode */}
                       <motion.div 
                         whileHover={{ scale: 1.05, y: -5 }}
                         whileTap={{ scale: 0.98 }}
-                        className="aspect-square rounded-3xl flex items-center justify-center shadow-2xl relative overflow-hidden mb-3 border border-white/5 group-hover:border-white/20 transition-all"
+                        className="aspect-[3/4] rounded-3xl flex items-center justify-center shadow-2xl relative overflow-hidden mb-3 border border-white/5 group-hover:border-white/20 transition-all"
                         style={{ 
                             // Dynamic gradient based on family color
                             background: `linear-gradient(135deg, ${fam.bgColor || '#1e293b'} 0%, #050505 100%)`,
@@ -118,9 +169,9 @@ const Home: React.FC = () => {
                                 }}
                               />
                             ) : (
-                               // No Image? Show the Icon nicely
+                               // No Image? Show the Icon nicely - Increased size slightly for 3:4 ratio
                                <div className="fallback-icon flex flex-col items-center justify-center text-white/90 group-hover:text-white transition-colors">
-                                  <IconComponent strokeWidth={1.5} className="w-12 h-12 md:w-16 md:h-16 mb-2 drop-shadow-lg" />
+                                  <IconComponent strokeWidth={1.5} className="w-14 h-14 md:w-20 md:h-20 mb-2 drop-shadow-lg" />
                                </div>
                             )}
                             
@@ -141,10 +192,16 @@ const Home: React.FC = () => {
            </div>
 
         </div>
-      </section>
+      </motion.section>
 
-      {/* FEATURES GRID - Pure Black Background */}
-      <section className="py-20 bg-black">
+      {/* FEATURES GRID - Animated on Scroll */}
+      <motion.section 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={fadeInUp}
+        className="py-20 bg-black"
+      >
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-12">
             <div className="bg-white/5 p-8 rounded-3xl border border-white/10 hover:border-brand-500/30 transition-colors">
@@ -170,10 +227,16 @@ const Home: React.FC = () => {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* CTA SECTION - Pure Black Background */}
-      <section className="py-20 relative overflow-hidden bg-black">
+      {/* CTA SECTION - Animated on Scroll */}
+      <motion.section 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeInUp}
+        className="py-20 relative overflow-hidden bg-black"
+      >
         <div className="absolute inset-0 bg-brand-900/10"></div>
         <div className="container mx-auto px-4 relative z-10 text-center">
            <h2 className="text-4xl font-bold text-white mb-6">Ready to upgrade your game?</h2>
@@ -183,7 +246,7 @@ const Home: React.FC = () => {
            </Link>
            <p className="mt-6 text-sm text-slate-500">Compatible with Smart TV, Firestick, Android, iOS, PC & Mac</p>
         </div>
-      </section>
+      </motion.section>
 
     </div>
   );
