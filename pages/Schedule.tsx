@@ -1,23 +1,25 @@
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, Filter, Lock, Play, ChevronRight, ChevronLeft } from 'lucide-react';
-import { SCHEDULE_EVENTS } from '../data/mockData';
+import { SCHEDULE_EVENTS, FAMILIES } from '../data/mockData';
 import { Link } from 'react-router-dom';
 
 const Schedule: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedFamilyId, setSelectedFamilyId] = useState('all');
 
-  // Categories for the filter chips
-  const categories = ['All', 'NHL', 'NFL', 'NBA', 'MLB', 'UFC', 'Soccer', 'Golf', 'Racing'];
+  // Generate category list from FAMILIES data
+  const categories = useMemo(() => {
+    return [
+      { id: 'all', name: 'All Sports' },
+      ...FAMILIES
+    ];
+  }, []);
 
-  // Filter events based on category
+  // Filter events based on selected family ID
   const filteredEvents = useMemo(() => {
-    if (selectedCategory === 'All') return SCHEDULE_EVENTS;
-    return SCHEDULE_EVENTS.filter(event => 
-      event.league.toLowerCase() === selectedCategory.toLowerCase() || 
-      (selectedCategory === 'Racing' && event.league === 'Motorsport')
-    );
-  }, [selectedCategory]);
+    if (selectedFamilyId === 'all') return SCHEDULE_EVENTS;
+    return SCHEDULE_EVENTS.filter(event => event.familyId === selectedFamilyId);
+  }, [selectedFamilyId]);
 
   // Group events by date
   const eventsByDate = useMemo(() => {
@@ -55,24 +57,24 @@ const Schedule: React.FC = () => {
           </div>
         </div>
 
-        {/* Categories Toolbar */}
+        {/* Categories Toolbar (Families) */}
         <div className="flex items-center gap-4 mb-10 overflow-x-auto pb-4 scrollbar-hide">
            <div className="flex items-center gap-2 text-slate-400 text-sm font-bold uppercase tracking-wider min-w-max">
-              <Filter className="w-4 h-4" /> Sports
+              <Filter className="w-4 h-4" /> Families
            </div>
            <div className="h-6 w-px bg-slate-800 mx-2 flex-shrink-0"></div>
            <div className="flex gap-2">
               {categories.map((cat) => (
                 <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
+                  key={cat.id}
+                  onClick={() => setSelectedFamilyId(cat.id)}
                   className={`px-5 py-2 rounded-lg text-sm font-bold whitespace-nowrap transition-all border ${
-                    selectedCategory === cat 
+                    selectedFamilyId === cat.id 
                       ? 'bg-slate-100 text-slate-900 border-white' 
                       : 'bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-600 hover:text-white'
                   }`}
                 >
-                  {cat === 'All' ? 'All Sports' : cat}
+                  {cat.name}
                 </button>
               ))}
            </div>
@@ -187,9 +189,9 @@ const Schedule: React.FC = () => {
              <div className="text-center py-20 bg-slate-900/30 rounded-2xl border border-slate-800 border-dashed">
                 <Calendar className="w-12 h-12 text-slate-600 mx-auto mb-4" />
                 <h3 className="text-xl font-bold text-white mb-2">No events found</h3>
-                <p className="text-slate-500">Try selecting a different category.</p>
+                <p className="text-slate-500">Try selecting a different family.</p>
                 <button 
-                   onClick={() => setSelectedCategory('All')} 
+                   onClick={() => setSelectedFamilyId('all')} 
                    className="mt-4 text-brand-500 hover:text-white text-sm font-bold"
                 >
                    View All Sports

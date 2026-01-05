@@ -3,6 +3,7 @@ export interface Family {
   name: string;
   icon: string; // Lucide icon name or image path
   description: string;
+  image: string; // Background image for the card
 }
 
 export interface SubFamily {
@@ -32,6 +33,7 @@ export interface Channel {
 
 export interface SportsEvent {
   id: string;
+  familyId: string; // New field for filtering
   league: string; // NHL, NFL, NBA, etc.
   homeTeam: string;
   awayTeam: string;
